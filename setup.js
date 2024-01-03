@@ -1,4 +1,4 @@
-const { error } = require('console');
+
 const con = require('./config/connection');
 const creatingTables = () => {
     con.query(`CREATE TABLE IF NOT EXISTS users (
@@ -43,7 +43,7 @@ const creatingTables = () => {
         ride_id INT,
         user_id INT,
         approved BOOL,
-        FOREIGN KEY (ride_id) REFERENCES rides(id) ON DELETE CASCADE ON UPDATE CASCADE
+        FOREIGN KEY (ride_id) REFERENCES rides(id) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
       )`, (error, result) => {
         if (error)
@@ -54,7 +54,7 @@ const creatingTables = () => {
     con.query(`CREATE TABLE IF NOT EXISTS likedRides (
         ride_id INT,
         user_id INT,
-        FOREIGN KEY (ride_id) REFERENCES rides(id) ON DELETE CASCADE ON UPDATE CASCADE
+        FOREIGN KEY (ride_id) REFERENCES rides(id) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
       )`, (error, result) => {
         if (error)
@@ -67,7 +67,7 @@ const creatingTables = () => {
         user_id INT,
         description VARCHAR(255) NOT NULL,
         rate INT NOT NULL,
-        FOREIGN KEY (ride_id) REFERENCES rides(id) ON DELETE CASCADE ON UPDATE CASCADE
+        FOREIGN KEY (ride_id) REFERENCES rides(id) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
       )`, (error, result) => {
         if (error)
@@ -80,7 +80,7 @@ const creatingTables = () => {
         user_id INT,
         title VARCHAR(255) NOT NULL,
         reason VARCHAR(255) NOT NULL,
-        FOREIGN KEY (ride_id) REFERENCES rides(id) ON DELETE CASCADE ON UPDATE CASCADE
+        FOREIGN KEY (ride_id) REFERENCES rides(id) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
       )`, (error, result) => {
         if (error)
@@ -134,9 +134,8 @@ const creatingTables = () => {
     });
     con.query(`CREATE TABLE IF NOT EXISTS orderProducts (
             product_id INT,
-            order_id INT ,
-            orderProduct
-            FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE
+            order_id INT,
+            FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
             FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE ON UPDATE CASCADE
             )`, (error, result) => {
         if (error)
