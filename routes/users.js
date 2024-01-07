@@ -4,6 +4,8 @@ const userController=require('../controllers/users');
 router.post('/register',userController.registre);
 router.post('/login',userController.login);
 router.post('/updateUserById/:Id',userController.updateUserById);
+router.post('/updatePassword/:Id',userController.updatePassword);
+router.post('/isValidPassword/:Id',userController.isValidPassword);
 router.delete('/delete/:Id',userController.deleteUser);
 router.get('/getUser/:Id',userController.getUserById);
 module.exports=router;

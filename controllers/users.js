@@ -98,6 +98,37 @@ const updateUserById = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Failed to update a user by id", error: error.message });
     }
-};
+}
+const updatePassword = async (req, res) => {
+    try {
+        const { Id } = req.params;
+        const { password } = req.body;
+        if (!password)
+            throw new Error("All fields must be filled");
+        const salt=await bcrypt.genSalt(10);
+        const hashedPassword=await bcrypt.hash(password,salt);
+        const updatePasswordQuery = `UPDATE users SET password = ? WHERE id = ?`;
+        const [result] = await con.promise().query(updatePasswordQuery, [hashedPassword, Id]);
+        res.status(200).json({ message: 'User passwodr updated successfully!', result });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to update the user password", error: error.message });
+    }
+}
+const isValidPassword = async (req, res) => {
+    try {
+        const { Id } = req.params;
+        const { confirmPassword } = req.body;
+        if (!confirmPassword)
+            throw new Error("All fields must be filled");
+        const check='SELECT * FROM users WHERE id = ?';
+        const [isValid]=await con.promise().query(check,[Id]);
+        const boo=await bcrypt.compare(confirmPassword,isValid[0].password);
+        if(boo)
+        return res.status(200).json({message:'Valid password',isValid:boo})
+        res.status(200).json({message:'Valid password',isValid:boo})
+        } catch (error) {
+        res.status(500).json({ message: "Failed to confirm the user password", error: error.message });
+    }
+}
 
-module.exports = { registre, deleteUser, getUserById, login, updateUserById };
+module.exports = { registre, deleteUser, getUserById, login, updateUserById ,updatePassword,isValidPassword};
