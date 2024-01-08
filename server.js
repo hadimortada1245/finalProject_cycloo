@@ -6,6 +6,9 @@ const app = express();
 const usersRoutes = require('./routes/users.js');
 const ridesRoutes = require('./routes/rides.js');
 const likedRidesRoutes = require('./routes/likedRides.js');
+const ridesRequestsRoutes = require('./routes/ridesRequests.js');
+const ridesJoiningRoutes = require('./routes/ridesJoining.js');
+const ridesReviewsRoutes = require('./routes/ridesReviews.js');
 
 app.use(cors());
 app.use(express.json());
@@ -22,7 +25,9 @@ try {
   app.use('/users', usersRoutes);
   app.use('/rides', ridesRoutes);
   app.use('/likedRides', likedRidesRoutes);
-  app.use('/ridesRequests', likedRidesRoutes);
+  app.use('/ridesRequests', ridesRequestsRoutes);
+  app.use('/ridesJoining', ridesJoiningRoutes);
+  app.use('/ridesReviews', ridesReviewsRoutes);Routes
 } catch (error) {
   console.error('Error starting the server:', error);
 }
