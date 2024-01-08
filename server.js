@@ -4,6 +4,8 @@ const cors = require('cors');
 const app = express();
 // const creatingTables = require('./setup');
 const usersRoutes = require('./routes/users.js');
+const ridesRoutes = require('./routes/rides.js');
+const likedRidesRoutes = require('./routes/likedRides.js');
 
 app.use(cors());
 app.use(express.json());
@@ -18,6 +20,8 @@ try {
   });
 
   app.use('/users', usersRoutes);
+  app.use('/rides', ridesRoutes);
+  app.use('/likedRidesRoutes', likedRidesRoutes);
 } catch (error) {
   console.error('Error starting the server:', error);
 }

@@ -32,7 +32,7 @@ const creatingTables = () => {
         maxMember INT,
         mapImg VARCHAR(255) NOT NULL,
         img VARCHAR(255) NOT NULL,
-        status BOOL
+        status BOOL DEFAULT false
       )`, (error, result) => {
         if (error)
             console.error('Creating rides table failed: ' + error);
