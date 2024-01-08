@@ -58,6 +58,4 @@ const getAllRides = async (req, res) => {
         res.status(500).json({ message: "Failed to select all rides", error: error.message });
     }
 }
-
-
 module.exports = {add,removeLike,countLikes,getAllRides};

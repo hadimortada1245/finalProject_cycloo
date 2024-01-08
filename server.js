@@ -21,7 +21,8 @@ try {
 
   app.use('/users', usersRoutes);
   app.use('/rides', ridesRoutes);
-  app.use('/likedRidesRoutes', likedRidesRoutes);
+  app.use('/likedRides', likedRidesRoutes);
+  app.use('/ridesRequests', likedRidesRoutes);
 } catch (error) {
   console.error('Error starting the server:', error);
 }

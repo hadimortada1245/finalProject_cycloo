@@ -90,6 +90,7 @@ const creatingTables = () => {
     });
 
     con.query(`CREATE TABLE IF NOT EXISTS ridesRequests (
+        id INT AUTO_INCREMENT PRIMARY KEY,
         user_id INT,
         title VARCHAR(255) NOT NULL,
         description longtext NOT NULL,
