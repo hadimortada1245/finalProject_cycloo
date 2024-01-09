@@ -168,4 +168,13 @@ const updateStatus = async (req, res) => {
         res.status(500).json({ message: "Failed to update a ride status", error: error.message });
     }
 }
-module.exports = {getAll,add,getRideById,deleteRide,update,updateStatus};
+const count = async (req, res) => {
+    try{
+        const getQuery= `SELECT COUNT(*) AS count FROM rides`;
+        const [result]= await con.promise().query(getQuery);
+        res.status(200).json({message:'select count rides successfully !',result})
+    }catch( error){
+        res.status(500).json({ message: "Failed to select the count of the rides", error: error.message });
+    }
+}
+module.exports = {count,getAll,add,getRideById,deleteRide,update,updateStatus};

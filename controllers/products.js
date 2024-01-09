@@ -79,6 +79,55 @@ const getAllProducts = async (req, res) => {
         res.status(500).json({ message: "Failed to select all rides.", error: error.message });
     }
 }
+const countProducts = async (req, res) => {
+    try {
+        const getCountQuery = `SELECT COUNT(*) AS count FROM products`;
+        const [result] = await con.promise().query(getCountQuery);
+        res.status(200).json({ message: 'All rides selected successfully!', result });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to select all rides.", error: error.message });
+    }
+}
+const getAllOrderProducts = async (req, res) => {
+    try {
+        const {Id}=req.params;
+        const getProductsQuery = `SELECT
+        u.id AS user_id,
+        u.name AS user_name,
+        u.email AS user_email,
+        u.photo AS user_photo,
+        u.phone AS user_phone,
+        u.role AS user_role,
+        u.address AS user_address,
+        u.level AS user_level,
+        u.joinedAt AS user_joinedAt,
+        o.id AS order_id,
+        o.status AS order_status,
+        o.deliver AS order_deliver,
+        o.createdAt AS order_createdAt,
+        p.id AS product_id,
+        p.name AS product_name,
+        p.type AS product_type,
+        p.description AS product_description,
+        p.company AS product_company,
+        p.price AS product_price,
+        p.delivery AS product_delivery,
+        p.img AS product_img,
+        p.quantity AS product_quantity,
+        p.selled AS product_selled,
+        COUNT(op.product_id) OVER (PARTITION BY o.id) AS total_products
+    FROM users u
+    JOIN orders o ON u.id = o.user_id
+    LEFT JOIN orderProducts op ON o.id = op.order_id
+    LEFT JOIN products p ON op.product_id = p.id
+    WHERE u.id = ?
+    `;
+        const [result] = await con.promise().query(getProductsQuery,[Id]);
+        res.status(200).json({ message: 'All user orders data selected successfully!', result });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to select all user orders data.", error: error.message });
+    }
+}
 const update = async (req, res) => {
     try {
         const { 
@@ -136,4 +185,4 @@ const reduceQn = async (req, res) => {
         res.status(500).json({ message: "Failed to reduce the product quantity", error: error.message });
     }
 }
-module.exports = {getAllProducts,add,getProductById,deleteProduct,update,reduceQn};
+module.exports = {countProducts,getAllProducts,add,getProductById,deleteProduct,update,reduceQn,getAllOrderProducts};

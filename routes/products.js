@@ -1,4 +1,3 @@
-
 const express=require('express');
 const router=express.Router();
 const productsController=require('../controllers/products');
@@ -8,4 +7,5 @@ router.post('/reduceQn/:Id',productsController.reduceQn);
 router.delete('/deleteProduct/:Id',productsController.deleteProduct);
 router.get('/getProductById/:Id',productsController.getProductById);
 router.get('/getAllProducts',productsController.getAllProducts);
+router.get('/countProducts',productsController.countProducts);
 module.exports=router;

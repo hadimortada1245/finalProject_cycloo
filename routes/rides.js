@@ -7,4 +7,5 @@ router.put('/update/:Id',ridesController.update);
 router.put('/updateStatus/:Id',ridesController.updateStatus);
 router.get('/getRideById/:Id',ridesController.getRideById);
 router.get('/getAll',ridesController.getAll);
+router.get('/count',ridesController.count);
 module.exports=router;
