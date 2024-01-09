@@ -1,8 +1,8 @@
 const con = require('../config/connection');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const generateToken = (Id, email) => {
-    const token = jwt.sign({ Id, email }, process.env.SECRET_KEY, { expiresIn: '1d' });
+const generateToken = (Id, email ,role) => {
+    const token = jwt.sign({ Id, email ,role }, process.env.SECRET_KEY, { expiresIn: '1d' });
     return token;
 }
 const login = async (req, res) => {
@@ -23,7 +23,7 @@ const login = async (req, res) => {
 
         const validPass = await bcrypt.compare(password, user.password);
         if (validPass) {
-            const token = generateToken(user.id, email);
+            const token = generateToken(user.id, email ,check[0].role);
             res.status(200).json({ message: 'Login successfully', user, token });
         } else {
             res.status(401).json({ message: 'Invalid password' });
@@ -40,19 +40,20 @@ const registre = async (req, res) => {
             password,
             phone,
             address,
+            role
         } = req.body;
-        if (!name || !email || !password || !phone || !address) throw Error("All fields must be filled");
+        if (!name || !email || !password || !phone || !address || !role) throw Error("All fields must be filled");
         const checkQuery = 'SELECT * FROM users WHERE email = ? OR phone = ?';
         const [check] = await con.promise().query(checkQuery, [email, phone]);
         if (check.length > 0)
             return res.status(500).json({ message: "Already exist", check });
         const salt = await bcrypt.genSalt(11);
         const hashedPass = await bcrypt.hash(password, salt);
-        const registreQuery = `INSERT INTO users (name, email, password, phone, address) VALUES (?, ?, ?, ?, ?)`;
+        const registreQuery = `INSERT INTO users (name, email, password, phone, address ,role) VALUES (?, ?, ?, ?, ?, ?)`;
 
-        const result = await con.promise().query(registreQuery, [name, email, hashedPass, phone, address]);
+        const result = await con.promise().query(registreQuery, [name, email, hashedPass, phone, address ,role]);
         if (result[0].affectedRows !== 1) throw Error('Failed to add data');
-        const token = generateToken(result[0].insertId, email);
+        const token = generateToken(result[0].insertId, email ,role);
         const getUser = 'SELECT * FROM users WHERE id = ? ';
         const [user] = await con.promise().query(getUser, [result[0].insertId]);
         res.status(200).json({ message: 'adding a user successfully', token, user });
