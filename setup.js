@@ -93,6 +93,7 @@ const creatingTables = () => {
         id INT AUTO_INCREMENT PRIMARY KEY,
         user_id INT,
         title VARCHAR(255) NOT NULL,
+        distance VARCHAR(255) NOT NULL,
         description longtext NOT NULL,
         date DATE NOT NULL,
         time VARCHAR(255) NOT NULL,

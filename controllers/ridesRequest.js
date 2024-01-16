@@ -4,12 +4,13 @@ const add = async (req, res) => {
         const { 
             title ,
             description ,
+            distance ,
             date ,
             time ,
             location,
-            difficuly
+            difficuly,
+            Id
         } = req.body;
-        const {Id}=req.params;
         if (!title ||
             !description ||
             !date ||
@@ -28,6 +29,7 @@ const add = async (req, res) => {
 
         const result = await con.promise().query(addQuery, [Id ,title ,
             description ,
+            distance ,
             date ,
             time ,
             location ,
@@ -122,7 +124,7 @@ const update = async (req, res) => {
             date = ? ,
             time = ? ,
             location = ? ,
-            difficuly = ? ,
+            difficuly = ? 
              WHERE id = ?`;
 
         const result = await con.promise().query(updateQuery, [title ,

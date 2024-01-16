@@ -9,6 +9,7 @@ const likedRidesRoutes = require('./routes/likedRides.js');
 const ridesRequestsRoutes = require('./routes/ridesRequests.js');
 const ridesJoiningRoutes = require('./routes/ridesJoining.js');
 const ridesReviewsRoutes = require('./routes/ridesReviews.js');
+const ridesReportsRoutes = require('./routes/ridesRports.js');
 const productsRoutes = require('./routes/products.js');
 const ordersRoutes = require('./routes/orders.js');
 const orderProductsRoutes = require('./routes/orderProducts.js');
@@ -30,6 +31,7 @@ try {
   app.use('/ridesRequests', ridesRequestsRoutes);
   app.use('/ridesJoining', ridesJoiningRoutes);
   app.use('/ridesReviews', ridesReviewsRoutes);
+  app.use('/ridesReports', ridesReportsRoutes);
   app.use('/products', productsRoutes);
   app.use('/orders', ordersRoutes);
   app.use('/orderProducts', orderProductsRoutes);
