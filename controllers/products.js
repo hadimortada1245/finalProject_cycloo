@@ -10,16 +10,12 @@ const add = async (req, res) => {
             delivery ,
             img ,
             quantity , 
-            selled 
         } = req.body;
         if (!name ||
             !type ||
             !description || 
             !company ||
-            !price ||
-            !delivery ||
-            !img ||
-            !quantity ) throw Error("All fields must be filled");
+            !img  ) throw Error("All fields must be filled");
         const addQuery = `INSERT INTO products ( name ,
             type ,
             description , 
@@ -27,8 +23,8 @@ const add = async (req, res) => {
             price ,
             delivery ,
             img ,
-            quantity , 
-            selled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+            quantity 
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
         const result = await con.promise().query(addQuery, [name ,
             type ,
@@ -37,8 +33,7 @@ const add = async (req, res) => {
             price ,
             delivery ,
             img ,
-            quantity , 
-            selled
+            quantity 
         ]);
         if (result[0].affectedRows !== 1) throw Error('Failed to add data');
         res.status(200).json({ message: 'adding a product successfully', result:result[0]});
@@ -54,9 +49,9 @@ const deleteProduct = async (req, res) => {
         const deleteQuery = `DELETE FROM products WHERE id = ?`;
         const result = await con.promise().query(deleteQuery, [Id]);
         if (result[0].affectedRows !== 1) throw Error('Failed to delete a product');
-        res.status(200).json({ message: 'A ride deleted successfully', result });
+        res.status(200).json({ message: 'A product deleted successfully', result });
     } catch (error) {
-        res.status(500).json({ message: "Failed to delete a ride", error: error.message });
+        res.status(500).json({ message: "Failed to delete a product", error: error.message });
     }
 }
 const getProductById = async (req, res) => {
@@ -74,18 +69,27 @@ const getAllProducts = async (req, res) => {
     try {
         const getProductsQuery = `SELECT * FROM products WHERE quantity > 0`;
         const [result] = await con.promise().query(getProductsQuery);
+        res.status(200).json({ message: 'All products selected successfully!', result });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to select all products.", error: error.message });
+    }
+}
+const getThreeProducts = async (req, res) => {
+    try {
+        const getProductsQuery = `SELECT * FROM products WHERE quantity > 0 ORDER BY id DESC LIMIT 3        `;
+        const [result] = await con.promise().query(getProductsQuery);
         res.status(200).json({ message: 'All rides selected successfully!', result });
     } catch (error) {
-        res.status(500).json({ message: "Failed to select all rides.", error: error.message });
+        res.status(500).json({ message: "Failed to select all products.", error: error.message });
     }
 }
 const countProducts = async (req, res) => {
     try {
         const getCountQuery = `SELECT COUNT(*) AS count FROM products`;
         const [result] = await con.promise().query(getCountQuery);
-        res.status(200).json({ message: 'All rides selected successfully!', result });
+        res.status(200).json({ message: 'The count of products selected successfully!', result });
     } catch (error) {
-        res.status(500).json({ message: "Failed to select all rides.", error: error.message });
+        res.status(500).json({ message: "Failed to select count products.", error: error.message });
     }
 }
 const getAllOrderProducts = async (req, res) => {
@@ -138,8 +142,7 @@ const update = async (req, res) => {
             price ,
             delivery ,
             img ,
-            quantity , 
-            selled
+            quantity 
         } = req.body;
         const {Id}=req.params;
         if (!name ||
@@ -156,6 +159,7 @@ const update = async (req, res) => {
         description = ? ,
         company = ? ,
         price = ? ,
+        delivery = ? ,
         img = ? ,
         quantity = ?  WHERE id = ?`;
 
@@ -166,8 +170,7 @@ const update = async (req, res) => {
             price ,
             delivery ,
             img ,
-            quantity , 
-            selled,Id]);
+            quantity ,Id]);
         if (result[0].affectedRows !== 1) throw Error('Failed to update the product');
         res.status(200).json({ message: 'Updating a product successfully', result:result[0]});
     } catch (error) {
@@ -185,4 +188,4 @@ const reduceQn = async (req, res) => {
         res.status(500).json({ message: "Failed to reduce the product quantity", error: error.message });
     }
 }
-module.exports = {countProducts,getAllProducts,add,getProductById,deleteProduct,update,reduceQn,getAllOrderProducts};
+module.exports = {getThreeProducts,countProducts,getAllProducts,add,getProductById,deleteProduct,update,reduceQn,getAllOrderProducts};

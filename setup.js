@@ -125,8 +125,7 @@ const creatingTables = () => {
             price INT NOT NULL,
             delivery INT NOT NULL,
             img VARCHAR(255) NOT NULL,
-            quantity VARCHAR(255) NOT NULL,
-            selled BOOL
+            quantity VARCHAR(255) NOT NULL
             )`, (error, result) => {
         if (error)
             console.error('Creating products table failed: ' + error);

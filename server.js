@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
-// const creatingTables = require('./setup');
+const creatingTables = require('./setup');
 const usersRoutes = require('./routes/users.js');
 const ridesRoutes = require('./routes/rides.js');
 const likedRidesRoutes = require('./routes/likedRides.js');
