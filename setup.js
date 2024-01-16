@@ -108,7 +108,7 @@ const creatingTables = () => {
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT,
             status BOOL,
-            deliver INT,
+            total INT,
             createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
           )`, (error, result) => {

@@ -3,23 +3,16 @@ const add = async (req, res) => {
     try {
         const { 
         user_id ,
-       status ,
-        delivery , 
+       status , 
         total
         } = req.body;
-        if (!user_id ||
-            !delivery ||
-            !total 
-            ) throw Error("All fields must be filled");
         const addQuery = `INSERT INTO orders (user_id ,
             status ,
-             delivery , 
              total
-            ) VALUES (?, ?, ?, ?)`;
+            ) VALUES (?, ?, ?)`;
 
         const result = await con.promise().query(addQuery, [user_id ,
-            status ,
-             delivery , 
+            status , 
              total]);
         if (result[0].affectedRows !== 1) throw Error('Failed to add data');
         res.status(200).json({ message: 'adding an order  successfully', result:result[0]});

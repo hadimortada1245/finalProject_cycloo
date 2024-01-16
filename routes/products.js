@@ -9,5 +9,5 @@ router.get('/getProductById/:Id',productsController.getProductById);
 router.get('/getAllProducts',productsController.getAllProducts);
 router.get('/countProducts',productsController.countProducts);
 router.get('/getThreeProducts',productsController.getThreeProducts);
-router.get('/getAllOrderProducts',productsController.getAllOrderProducts);//Not tested yet
+router.get('/getAllOrderProducts/:Id',productsController.getAllOrderProducts);
 module.exports=router;

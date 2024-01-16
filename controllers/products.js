@@ -107,7 +107,7 @@ const getAllOrderProducts = async (req, res) => {
         u.joinedAt AS user_joinedAt,
         o.id AS order_id,
         o.status AS order_status,
-        o.deliver AS order_deliver,
+        o.total AS order_total,
         o.createdAt AS order_createdAt,
         p.id AS product_id,
         p.name AS product_name,
@@ -118,7 +118,6 @@ const getAllOrderProducts = async (req, res) => {
         p.delivery AS product_delivery,
         p.img AS product_img,
         p.quantity AS product_quantity,
-        p.selled AS product_selled,
         COUNT(op.product_id) OVER (PARTITION BY o.id) AS total_products
     FROM users u
     JOIN orders o ON u.id = o.user_id
