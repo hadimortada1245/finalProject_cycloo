@@ -39,19 +39,19 @@ const registre = async (req, res) => {
             email,
             password,
             phone,
-            address,
-            role
+            address
         } = req.body;
-        if (!name || !email || !password || !phone || !address || !role) throw Error("All fields must be filled");
+        const role='user'
+        if (!name || !email || !password || !phone || !address ) throw Error("All fields must be filled");
         const checkQuery = 'SELECT * FROM users WHERE email = ? OR phone = ?';
         const [check] = await con.promise().query(checkQuery, [email, phone]);
         if (check.length > 0)
             return res.status(500).json({ message: "Already exist", check });
         const salt = await bcrypt.genSalt(11);
         const hashedPass = await bcrypt.hash(password, salt);
-        const registreQuery = `INSERT INTO users (name, email, password, phone, address ,role) VALUES (?, ?, ?, ?, ?, ?)`;
+        const registreQuery = `INSERT INTO users (name, email, password, phone, address ) VALUES (?, ?, ?, ?, ?)`;
 
-        const result = await con.promise().query(registreQuery, [name, email, hashedPass, phone, address ,role]);
+        const result = await con.promise().query(registreQuery, [name, email, hashedPass, phone, address]);
         if (result[0].affectedRows !== 1) throw Error('Failed to add data');
         const token = generateToken(result[0].insertId, email ,role);
         const getUser = 'SELECT * FROM users WHERE id = ? ';
@@ -83,6 +83,17 @@ const getUserById = async (req, res) => {
         res.status(200).json({ message: 'A user selected successfully !', result });
     } catch (error) {
         res.status(500).json({ message: "Failed to select a user by id", error: error.message });
+    }
+}
+const getCountUsers = async (req, res) => {
+    try {
+        const { Id
+        } = req.params;
+        const getUserQuery = `SELECT COUNT(*) AS countUsers FROM users `;
+        const [result] = await con.promise().query(getUserQuery);
+        res.status(200).json({ message: 'users count selected successfully !', result });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to select count users ", error: error.message });
     }
 }
 const updateUserById = async (req, res) => {
@@ -131,5 +142,29 @@ const isValidPassword = async (req, res) => {
         res.status(500).json({ message: "Failed to confirm the user password", error: error.message });
     }
 }
+const getAllUsers_d = async (req, res) => {
+    try {
+        const query=`SELECT
+        u.id,
+        u.name,
+        u.email,
+        u.phone,
+        u.level,
+        COUNT(DISTINCT o.id) AS order_count,
+        COUNT(DISTINCT r.ride_id) AS ride_count
+      FROM
+        users u
+      LEFT JOIN
+        orders o ON u.id = o.user_id
+      LEFT JOIN
+        ridesJoining r ON u.id = r.user_id
+      GROUP BY
+        u.id, u.name, u.email, u.phone, u.level`;
+        const [data]=await con.promise().query(query);
+        res.status(200).json({message:'Select all users data for admin dashboard',data})
+        } catch (error) {
+        res.status(500).json({ message: "Failed to select all users data for admin dashboard", error: error.message });
+    }
+}
 
-module.exports = { registre, deleteUser, getUserById, login, updateUserById ,updatePassword,isValidPassword};
+module.exports = {getAllUsers_d, getCountUsers,registre, deleteUser, getUserById, login, updateUserById ,updatePassword,isValidPassword};

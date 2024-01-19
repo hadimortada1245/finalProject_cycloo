@@ -14,8 +14,9 @@ const add = async (req, res) => {
         if (!name ||
             !type ||
             !description || 
-            !company ||
-            !img  ) throw Error("All fields must be filled");
+            !company|| 
+            !img  
+            ) throw Error("All fields must be filled");
         const addQuery = `INSERT INTO products ( name ,
             type ,
             description , 
