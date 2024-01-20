@@ -4,4 +4,7 @@ const ridesJoiningController=require('../controllers/ridesJoining');
 router.post('/add',ridesJoiningController.add);
 router.put('/update',ridesJoiningController.update);
 router.get('/getAllRides',ridesJoiningController.getAllRides);
+router.get('/getCountJoiningRequest',ridesJoiningController.getCountJoiningRequest);
+router.get('/getJoiningRequestsData',ridesJoiningController.getJoiningRequestsData);
+router.delete('/deleteJoinRequest',ridesJoiningController.deleteJoinRequest);
 module.exports=router;

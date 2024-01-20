@@ -40,6 +40,7 @@ const creatingTables = () => {
             console.log('Rides table created successfully');
     });
     con.query(`CREATE TABLE IF NOT EXISTS ridesJoining (
+        id INT AUTO_INCREMENT PRIMARY KEY,
         ride_id INT,
         user_id INT,
         approved BOOL,
