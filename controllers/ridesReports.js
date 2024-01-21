@@ -70,8 +70,10 @@ const count = async (req, res) => {
 const getReportsData = async (req, res) => {
     try{
         const getQuery = `SELECT
+        reportedRides.id as id,
         users.name AS user_name,
         rides.location,
+        user_id,
         rides.id AS ride_id,
         reportedRides.reason,
         reportedRides.title AS report_title

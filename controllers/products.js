@@ -2,47 +2,41 @@ const con = require('../config/connection');
 const add = async (req, res) => {
     try {
         const { 
-            name ,
-            type ,
-            description , 
-            company ,
-            price ,
-            delivery ,
-            img ,
-            quantity , 
+            name,
+            type,
+            description,
+            company,
+            price,
+            delivery,
+            img,
+            quantity
         } = req.body;
-        if (!name ||
-            !type ||
-            !description || 
-            !company|| 
-            !img  
-            ) throw Error("All fields must be filled");
-        const addQuery = `INSERT INTO products ( name ,
-            type ,
-            description , 
-            company ,
-            price ,
-            delivery ,
-            img ,
-            quantity 
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
-        const result = await con.promise().query(addQuery, [name ,
-            type ,
-            description , 
-            company ,
-            price ,
-            delivery ,
-            img ,
-            quantity 
-        ]);
-        if (result[0].affectedRows !== 1) throw Error('Failed to add data');
-        res.status(200).json({ message: 'adding a product successfully', result:result[0]});
+        // Check if required fields are present
+        if (!name || !type || !description || !company || !img) {
+            throw new Error("All fields must be filled");
+        }
 
+        const addQuery = `INSERT INTO products (name, type, description, company, price, delivery, img, quantity) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+
+        const result = await con.promise().query(addQuery, [name, type, description, company, price, delivery, img, quantity]);
+
+        if (result[0].affectedRows !== 1) {
+            throw  Error('Failed to add data');
+        }
+        const newProductId = result[0].insertId;
+        const newQuery = `SELECT * FROM products WHERE id = ?`;
+        const [newProduct] = await con.promise().query(newQuery, [newProductId]);
+        if (newProduct.length !== 1) {
+            throw Error('Failed to retrieve the newly added product');
+        }
+        res.status(200).json({ message: 'Adding a product successfully', result: newProduct[0] });
     } catch (error) {
         res.status(500).json({ message: "Failed to add a product", error: error.message });
     }
 }
+
 const deleteProduct = async (req, res) => {
     try {
         const { Id

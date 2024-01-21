@@ -77,6 +77,7 @@ const creatingTables = () => {
             console.log('RidesReviews table created successfully');
     });
     con.query(`CREATE TABLE IF NOT EXISTS reportedRides (
+        id INT AUTO_INCREMENT PRIMARY KEY,
         ride_id INT,
         user_id INT,
         title VARCHAR(255) NOT NULL,
@@ -135,16 +136,17 @@ const creatingTables = () => {
             console.log('Products table created successfully');
     });
     con.query(`CREATE TABLE IF NOT EXISTS orderProducts (
-            product_id INT,
-            order_id INT,
-            FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
-            FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE ON UPDATE CASCADE
-            )`, (error, result) => {
+        product_id INT,
+        order_id INT,
+        FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE ON UPDATE CASCADE
+    )`, (error, result) => {
         if (error)
             console.error('Creating orderProducts table failed: ' + error);
         else
             console.log('OrderProducts table created successfully');
     });
+    
 }
 module.exports = creatingTables;
 
