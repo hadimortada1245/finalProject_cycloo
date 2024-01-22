@@ -10,9 +10,6 @@ const add = async (req, res) => {
             location,
             difficuly,
             cost,
-            direction,
-            duration,
-            maxMember,
             mapImg,
             img
         } = req.body;
@@ -23,9 +20,6 @@ const add = async (req, res) => {
             !time ||
             !location||
             !difficuly||
-            !direction||
-            !duration||
-            !maxMember||
             !mapImg||
             !img) throw Error("All fields must be filled");
         const addQuery = `INSERT INTO rides (title ,
@@ -36,11 +30,8 @@ const add = async (req, res) => {
             location ,
             difficuly ,
             cost ,
-            direction ,
-            duration ,
-            maxMember,
             mapImg ,
-            img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+            img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
         const result = await con.promise().query(addQuery, [title ,
             description ,
@@ -50,13 +41,12 @@ const add = async (req, res) => {
             location ,
             difficuly ,
             cost ,
-            direction ,
-            duration ,
-            maxMember,
             mapImg ,
             img]);
         if (result[0].affectedRows !== 1) throw Error('Failed to add data');
-        res.status(200).json({ message: 'adding a ride successfully', result:result[0]});
+        const newQuery=`SELECT * FROM rides WHERE id = ?`;
+        const [newRide]= await con.promise().query(newQuery,[result[0].insertId])
+        res.status(200).json({ message: 'adding a ride successfully', result:newRide[0]});
 
     } catch (error) {
         res.status(500).json({ message: "Failed to add a ride", error: error.message });
@@ -107,7 +97,7 @@ const update = async (req, res) => {
             cost,
             direction,
             duration,
-            maxMember,
+            elevation,
             mapImg,
             img
         } = req.body;
@@ -121,7 +111,7 @@ const update = async (req, res) => {
             !difficuly||
             !direction||
             !duration||
-            !maxMember||
+            !elevation||
             !mapImg||
             !img) throw Error("All fields must be filled");
         const updateQuery = `UPDATE rides SET title = ? ,
@@ -134,7 +124,7 @@ const update = async (req, res) => {
             cost = ? ,
             direction = ?,
             duration = ? ,
-            maxMember= ? ,
+            elevation= ? ,
             mapImg = ? ,
             img= ? WHERE id = ?`;
 
@@ -148,7 +138,7 @@ const update = async (req, res) => {
             cost ,
             direction ,
             duration ,
-            maxMember,
+            elevation,
             mapImg ,
             img,Id]);
         if (result[0].affectedRows !== 1) throw Error('Failed to update the ride');

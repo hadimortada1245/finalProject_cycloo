@@ -166,7 +166,9 @@ const update = async (req, res) => {
             img ,
             quantity ,Id]);
         if (result[0].affectedRows !== 1) throw Error('Failed to update the product');
-        res.status(200).json({ message: 'Updating a product successfully', result:result[0]});
+        const updatedQuery=`SELECT * FROM products WHERE id = ?`;
+        const [updatedProduct] =await con.promise().query(updatedQuery,[Id]);
+        res.status(200).json({ message: 'Updating a product successfully', result:updatedProduct[0]});
     } catch (error) {
         res.status(500).json({ message: "Failed to update a product", error: error.message });
     }

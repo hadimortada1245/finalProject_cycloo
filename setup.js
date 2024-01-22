@@ -28,8 +28,8 @@ const creatingTables = () => {
         difficuly VARCHAR(255) NOT NULL,
         cost INT,
         direction VARCHAR(255),
+        elevation VARCHAR(255),
         duration VARCHAR(255),
-        maxMember INT,
         mapImg VARCHAR(255) NOT NULL,
         img VARCHAR(255) NOT NULL,
         status BOOL DEFAULT false
