@@ -88,7 +88,7 @@ const count = async (req, res) => {
 }
 const getRequestData = async (req, res) => {
     try {
-        const getQuery = `SELECT ridesRequests.*, users.name AS user_name
+        const getQuery = `SELECT ridesRequests.*, users.email AS user_email
         FROM ridesRequests
         JOIN users ON ridesRequests.user_id = users.id`;
         const [result] = await con.promise().query(getQuery);

@@ -142,7 +142,9 @@ const update = async (req, res) => {
             mapImg ,
             img,Id]);
         if (result[0].affectedRows !== 1) throw Error('Failed to update the ride');
-        res.status(200).json({ message: 'Updating a ride successfully', result:result[0]});
+        const updatedQuery=`SELECT * FROM rides WHERE id = ?`;
+        const [updated]=await con.promise().query(updatedQuery,[Id]);
+        res.status(200).json({ message: 'Updating a ride successfully', result:updated[0]});
     } catch (error) {
         res.status(500).json({ message: "Failed to update a ride", error: error.message });
     }
@@ -153,7 +155,9 @@ const updateStatus = async (req, res) => {
         const updateQuery = `UPDATE rides SET status = !status  WHERE id = ?`;
         const result = await con.promise().query(updateQuery, [Id]);
         if (result[0].affectedRows !== 1) throw Error('Failed to update the ride status');
-        res.status(200).json({ message: 'Updating a ride status successfully', result:result[0]});
+        const updatedQuery=`SELECT * FROM rides WHERE id = ?`;
+        const [updatedRide]=await con.promise().query(updatedQuery,[Id])
+        res.status(200).json({ message: 'Updating a ride status successfully', result:updatedRide[0]});
     } catch (error) {
         res.status(500).json({ message: "Failed to update a ride status", error: error.message });
     }
