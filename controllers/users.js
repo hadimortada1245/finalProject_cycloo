@@ -24,7 +24,7 @@ const login = async (req, res) => {
         const validPass = await bcrypt.compare(password, user.password);
         if (validPass) {
             const token = generateToken(user.id, email ,check[0].role);
-            res.status(200).json({ message: 'Login successfully', user, token });
+            res.status(200).json({ message: 'Login successfully', id:user.id,role:user.role,level:user.level, token });
         } else {
             res.status(401).json({ message: 'Invalid password' });
         }
@@ -56,7 +56,7 @@ const registre = async (req, res) => {
         const token = generateToken(result[0].insertId, email ,role);
         const getUser = 'SELECT * FROM users WHERE id = ? ';
         const [user] = await con.promise().query(getUser, [result[0].insertId]);
-        res.status(200).json({ message: 'adding a user successfully', token, user });
+        res.status(200).json({ message: 'adding a user successfully',id:user[0].id,level:user[0].level,role:user[0].role, token });
 
     } catch (error) {
         res.status(500).json({ message: "Failed to add a user", error: error.message });
