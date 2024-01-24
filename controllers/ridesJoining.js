@@ -77,6 +77,48 @@ const getAllRides = async (req, res) => {
         res.status(500).json({ message: "Failed to fetch all data", error: error.message });
     }
 }
+const getAllRidesForRideSection = async (req, res) => {
+    try {
+        const getQuery = `SELECT 
+        rides.*,
+        COUNT(ridesJoining.user_id) AS participants_count
+    FROM 
+        rides
+    LEFT JOIN 
+        ridesJoining ON rides.id = ridesJoining.ride_id
+    WHERE
+        rides.date > CURDATE()  -- Add this condition to filter rides with a date less than the current date
+    GROUP BY 
+        rides.id`;
+        const [result] = await con.promise().query(getQuery);
+        res.status(200).json({ message: "Select rides with participants successfully", result });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to fetch all data", error: error.message });
+    }
+}
+const getAllRidesForRideSectionWithUser = async (req, res) => {
+    try {
+        const { Id } = req.params;
+        const getQuery = `
+            SELECT 
+                rides.*,
+                COUNT(ridesJoining.user_id) AS participants_count,
+                IF(COUNT(CASE WHEN ridesJoining.user_id = ${Id} THEN 1 END) > 0, 1, 0) AS user_joined
+            FROM 
+                rides
+            LEFT JOIN 
+                ridesJoining ON rides.id = ridesJoining.ride_id
+            WHERE
+                rides.date > CURDATE()
+            GROUP BY 
+                rides.id`;
+    
+        const [result] = await con.promise().query(getQuery);
+        res.status(200).json({ message: "Select rides with participants successfully", result });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to fetch all data", error: error.message });
+    }    
+}
 const getCountJoiningRequest = async (req, res) => {
     try {
         const getQuery = `SELECT COUNT(*) AS count FROM ridesJoining WHERE approved = 0`;
@@ -112,4 +154,4 @@ const getJoiningRequestsData = async (req, res) => {
     }
 }
 
-module.exports = {deleteJoinRequest,getJoiningRequestsData,getCountJoiningRequest, add, update, getAllRides };
+module.exports = {getAllRidesForRideSectionWithUser,getAllRidesForRideSection,deleteJoinRequest,getJoiningRequestsData,getCountJoiningRequest, add, update, getAllRides };

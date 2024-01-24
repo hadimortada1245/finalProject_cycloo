@@ -6,5 +6,7 @@ router.put('/update',ridesJoiningController.update);
 router.get('/getAllRides',ridesJoiningController.getAllRides);
 router.get('/getCountJoiningRequest',ridesJoiningController.getCountJoiningRequest);
 router.get('/getJoiningRequestsData',ridesJoiningController.getJoiningRequestsData);
+router.get('/getAllRidesForRideSection',ridesJoiningController.getAllRidesForRideSection);
+router.get('/getAllRidesForRideSectionWithUser/:Id',ridesJoiningController.getAllRidesForRideSectionWithUser);
 router.delete('/deleteJoinRequest',ridesJoiningController.deleteJoinRequest);
 module.exports=router;
