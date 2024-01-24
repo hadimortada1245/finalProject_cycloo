@@ -55,8 +55,8 @@ const creatingTables = () => {
     con.query(`CREATE TABLE IF NOT EXISTS likedRides (
         ride_id INT,
         user_id INT,
-        FOREIGN KEY (ride_id) REFERENCES rides(id) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
+        FOREIGN KEY (ride_id) REFERENCES rides(id) ,
+        FOREIGN KEY (user_id) REFERENCES users(id) 
       )`, (error, result) => {
         if (error)
             console.error('Creating likedRides table failed: ' + error);

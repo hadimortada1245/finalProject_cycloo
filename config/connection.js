@@ -4,7 +4,7 @@ const con = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'cycloo_c',
+  database: 'cycloo_co',
   port: 3306,
   waitForConnections: true,
   // connectionLimit: 10,

@@ -2,10 +2,10 @@ const con = require('../config/connection');
 const add = async (req, res) => {
     try {
         const { 
-            userId,rideId
+            user_id,ride_id
         } =req.body ;
         const addQuery = `INSERT INTO likedRides (ride_id, user_id) VALUES (?, ?)`;
-        const result = await con.promise().query(addQuery, [rideId ,userId]);
+        const result = await con.promise().query(addQuery, [ride_id ,user_id]);
         if (result[0].affectedRows !== 1) throw Error('Failed to add data to likedRides table');
         res.status(200).json({ message: 'adding a like successfully'});
     } catch (error) {
@@ -14,10 +14,10 @@ const add = async (req, res) => {
 }
 const removeLike = async (req, res) => {
     try {
-        const { userId,rideId
+        const { user_id,ride_id
         } = req.body;
         const deleteQuery = `DELETE FROM likedRides WHERE user_id = ? AND ride_id = ?`;
-        const result = await con.promise().query(deleteQuery, [userId,rideId]);
+        const result = await con.promise().query(deleteQuery, [user_id,ride_id]);
         if (result[0].affectedRows !== 1) throw Error('Failed to remove a like');
         res.status(200).json({ message: 'A like removed successfully'});
     } catch (error) {
@@ -47,10 +47,12 @@ const getAllRides = async (req, res) => {
         rides r
     LEFT JOIN
         likedRides lr ON r.id = lr.ride_id
+    WHERE
+        r.status = 1
     GROUP BY
         r.id
     ORDER BY
-        r.id;
+        r.id
     `;
         const [result] = await con.promise().query(selectQuery);
         res.status(200).json({ message: 'Rides plus likes selected  successfully',result});
@@ -58,4 +60,26 @@ const getAllRides = async (req, res) => {
         res.status(500).json({ message: "Failed to select all rides", error: error.message });
     }
 }
-module.exports = {add,removeLike,countLikes,getAllRides};
+const getAllRides_u = async (req, res) => {
+    try {
+        const selectQuery = `SELECT
+        r.*,
+        COUNT(lr.user_id) AS like_count
+    FROM
+        rides r
+    LEFT JOIN
+        likedRides lr ON r.id = lr.ride_id
+    WHERE
+        r.status = 1
+    GROUP BY
+        r.id
+    ORDER BY
+        r.id
+    `;
+        const [result] = await con.promise().query(selectQuery);
+        res.status(200).json({ message: 'Rides plus likes selected  successfully',result});
+    } catch (error) {
+        res.status(500).json({ message: "Failed to select all rides", error: error.message });
+    }
+}
+module.exports = {add,removeLike,countLikes,getAllRides,getAllRides_u};

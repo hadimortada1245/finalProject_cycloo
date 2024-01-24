@@ -109,9 +109,6 @@ const update = async (req, res) => {
             !time ||
             !location||
             !difficuly||
-            !direction||
-            !duration||
-            !elevation||
             !mapImg||
             !img) throw Error("All fields must be filled");
         const updateQuery = `UPDATE rides SET title = ? ,
