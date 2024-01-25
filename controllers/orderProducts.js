@@ -3,13 +3,13 @@ const add = async (req, res) => {
     try {
         const { 
         order_id,
-       products_Id
+        products,
         } = req.body;
-        products_Id.forEach(async element => {
+        products.forEach(async element => {
             const addQuery = `INSERT INTO orderProducts (order_id ,
-                product_id) VALUES (?, ?)`;
+                product_id,quantity) VALUES (?, ?, ?)`;
             const result = await con.promise().query(addQuery, [order_id ,
-                 element]);
+                 element.productId,element.quantity]);
                  if (result[0].affectedRows !== 1) throw Error('Failed to add data');
         });
         res.status(200).json({ message: 'adding an orderProduct  successfully'});

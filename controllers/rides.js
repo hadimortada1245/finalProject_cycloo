@@ -168,4 +168,62 @@ const count = async (req, res) => {
         res.status(500).json({ message: "Failed to select the count of the rides", error: error.message });
     }
 }
-module.exports = {count,getAll,add,getRideById,deleteRide,update,updateStatus};
+const lastRideUser = async (req, res) => {
+    const {Id}=req.params;
+    try{
+        const getQuery= `SELECT *
+        FROM rides
+        JOIN ridesJoining ON rides.id = ridesJoining.ride_id
+        WHERE ridesJoining.user_id = ? 
+        ORDER BY rides.date DESC
+        LIMIT 2`;
+        const [result]= await con.promise().query(getQuery,[Id]);
+        res.status(200).json({message:'select last tow rides for a user successfully !',result})
+    }catch( error){
+        res.status(500).json({ message: "Failed to select the last tow rides by user id ", error: error.message });
+    }
+}
+const userRides = async (req, res) => {
+    const {Id}=req.params;
+    try{
+        const getQuery= `SELECT
+        r.id AS ride_id,
+        r.title,
+        r.distance,
+        r.date,
+        r.time,
+        r.location,
+        r.difficuly,
+        r.cost,
+        r.direction,
+        r.elevation,
+        r.duration,
+        r.status,
+        COUNT(rj.id) AS joined_people_count
+    FROM
+        rides r
+    JOIN
+        ridesJoining rj ON r.id = rj.ride_id
+    WHERE
+        rj.user_id = ?
+    GROUP BY
+        r.id`;
+        const [result]= await con.promise().query(getQuery,[Id]);
+        res.status(200).json({message:'select last tow rides for a user successfully !',result})
+    }catch( error){
+        res.status(500).json({ message: "Failed to select the last tow rides by user id ", error: error.message });
+    }
+}
+const latestRide = async (req, res) => {
+    try{
+        const getQuery= `SELECT *
+        FROM rides
+        ORDER BY rides.date DESC
+        LIMIT 1`;
+        const [result]= await con.promise().query(getQuery);
+        res.status(200).json({message:'select latest  ride  successfully !',result})
+    }catch( error){
+        res.status(500).json({ message: "Failed to select the latest ride", error: error.message });
+    }
+}
+module.exports = {userRides,latestRide,lastRideUser,count,getAll,add,getRideById,deleteRide,update,updateStatus};

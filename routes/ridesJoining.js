@@ -8,5 +8,6 @@ router.get('/getCountJoiningRequest',ridesJoiningController.getCountJoiningReque
 router.get('/getJoiningRequestsData',ridesJoiningController.getJoiningRequestsData);
 router.get('/getAllRidesForRideSection',ridesJoiningController.getAllRidesForRideSection);
 router.get('/getAllRidesForRideSectionWithUser/:Id',ridesJoiningController.getAllRidesForRideSectionWithUser);
+router.get('/getRidesCountByUserId/:Id',ridesJoiningController.getRidesCountByUserId);
 router.delete('/deleteJoinRequest',ridesJoiningController.deleteJoinRequest);
 module.exports=router;

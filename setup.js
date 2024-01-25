@@ -111,6 +111,8 @@ const creatingTables = () => {
             user_id INT,
             status BOOL,
             total INT,
+            quantity INT,
+            delivery INT,
             createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
           )`, (error, result) => {
@@ -118,6 +120,23 @@ const creatingTables = () => {
             console.error('Creating orders table failed: ' + error);
         else
             console.log('Orders table created successfully');
+    });
+    con.query(`CREATE TABLE IF NOT EXISTS cart (
+            user_id INT,
+            quantity INT,
+            maxQuantity INT,
+            delivery INT,
+            product_Id INT,
+            price INT,
+            img VARCHAR(255),
+            name VARCHAR(255),
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY (product_Id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE
+          )`, (error, result) => {
+        if (error)
+            console.error('Creating cart table failed: ' + error);
+        else
+            console.log('Cart table created successfully');
     });
     con.query(`CREATE TABLE IF NOT EXISTS products (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -138,6 +157,7 @@ const creatingTables = () => {
     con.query(`CREATE TABLE IF NOT EXISTS orderProducts (
         product_id INT,
         order_id INT,
+        quantity INT,
         FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE ON UPDATE CASCADE
     )`, (error, result) => {

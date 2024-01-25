@@ -128,6 +128,16 @@ const getCountJoiningRequest = async (req, res) => {
         res.status(500).json({ message: "Failed to fetch  data", error: error.message });
     }
 }
+const getRidesCountByUserId = async (req, res) => {
+    const {Id}=req.params;
+    try {
+        const getQuery = `SELECT COUNT(*) AS count FROM ridesJoining WHERE user_id = ?`;
+        const [result] = await con.promise().query(getQuery,[Id]);
+        res.status(200).json({ message: "Select counts rides joining for a user successfully", result });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to fetch  data", error: error.message });
+    }
+}
 const getJoiningRequestsData = async (req, res) => {
     try {
         const getQuery = `SELECT
@@ -154,4 +164,4 @@ const getJoiningRequestsData = async (req, res) => {
     }
 }
 
-module.exports = {getAllRidesForRideSectionWithUser,getAllRidesForRideSection,deleteJoinRequest,getJoiningRequestsData,getCountJoiningRequest, add, update, getAllRides };
+module.exports = {getRidesCountByUserId,getAllRidesForRideSectionWithUser,getAllRidesForRideSection,deleteJoinRequest,getJoiningRequestsData,getCountJoiningRequest, add, update, getAllRides };

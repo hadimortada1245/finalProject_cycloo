@@ -1,0 +1,10 @@
+express=require('express');
+const router=express.Router();
+const cartController=require('../controllers/cart');
+router.post('/add',cartController.add);
+router.put('/increase',cartController.increase);
+router.post('/exist',cartController.exist);
+router.put('/decrease',cartController.decrease);
+router.delete('/remove',cartController.remove);
+router.get('/getCartDataByUserId/:Id',cartController.getCartDataByUserId);
+module.exports=router;

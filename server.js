@@ -13,6 +13,7 @@ const ridesReportsRoutes = require('./routes/ridesRports.js');
 const productsRoutes = require('./routes/products.js');
 const ordersRoutes = require('./routes/orders.js');
 const orderProductsRoutes = require('./routes/orderProducts.js');
+const cartRoutes = require('./routes/cart.js');
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -26,6 +27,7 @@ try {
   });
 
   app.use('/users', usersRoutes);
+  app.use('/cart', cartRoutes);
   app.use('/rides', ridesRoutes);
   app.use('/likedRides', likedRidesRoutes);
   app.use('/ridesRequests', ridesRequestsRoutes);

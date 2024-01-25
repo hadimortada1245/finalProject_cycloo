@@ -71,8 +71,18 @@ const getAllProducts = async (req, res) => {
 }
 const getThreeProducts = async (req, res) => {
     try {
-        const getProductsQuery = `SELECT * FROM products WHERE quantity > 0 ORDER BY id DESC LIMIT 3        `;
+        const getProductsQuery = `SELECT * FROM products WHERE quantity > 0 AND type='bicycle' ORDER BY id DESC LIMIT 3        `;
         const [result] = await con.promise().query(getProductsQuery);
+        res.status(200).json({ message: 'All rides selected successfully!', result });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to select all products.", error: error.message });
+    }
+}
+const getProductsByType = async (req, res) => {
+    const {type}=req.body;
+    try {
+        const getProductsQuery = `SELECT * FROM products WHERE quantity > 0 AND type = ?`;
+        const [result] = await con.promise().query(getProductsQuery,[type]);
         res.status(200).json({ message: 'All rides selected successfully!', result });
     } catch (error) {
         res.status(500).json({ message: "Failed to select all products.", error: error.message });
@@ -184,4 +194,4 @@ const reduceQn = async (req, res) => {
         res.status(500).json({ message: "Failed to reduce the product quantity", error: error.message });
     }
 }
-module.exports = {getThreeProducts,countProducts,getAllProducts,add,getProductById,deleteProduct,update,reduceQn,getAllOrderProducts};
+module.exports = {getProductsByType,getThreeProducts,countProducts,getAllProducts,add,getProductById,deleteProduct,update,reduceQn,getAllOrderProducts};
