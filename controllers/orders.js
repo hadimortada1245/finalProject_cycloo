@@ -57,4 +57,25 @@ const getCountOrdersByUserId = async (req, res) => {
         res.status(500).json({ message: "Failed to select the count of the orders", error: error.message });
     }
 }
-module.exports = {add,getCountOrdersByUserId,updateStatus,countOrders};
+const getOrdersByUserId = async (req, res) => {
+    const {Id} =req.params;
+    try{
+        const getQuery= `SELECT * FROM orders WHERE user_id = ?`;
+        const [result]= await con.promise().query(getQuery,[Id]);
+        res.status(200).json({message:'select  orders successfully !',result})
+    }catch( error){
+        res.status(500).json({ message: "Failed to select  the orders", error: error.message });
+    }
+}
+const getOrders = async (req, res) => {
+    try{
+        const getQuery= `SELECT orders.*, users.name AS user_name
+        FROM orders
+        JOIN users ON orders.user_id = users.id`;
+        const [result]= await con.promise().query(getQuery);
+        res.status(200).json({message:'select  orders successfully !',result})
+    }catch( error){
+        res.status(500).json({ message: "Failed to select  the orders", error: error.message });
+    }
+}
+module.exports = {add,getCountOrdersByUserId,updateStatus,countOrders,getOrdersByUserId,getOrders};

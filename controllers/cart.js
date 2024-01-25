@@ -25,6 +25,7 @@ const increase=async(req,res)=>{
     const [existingItem] = await con.promise().query('SELECT * FROM cart WHERE user_id = ? AND product_Id = ?', [userId, productId]);
 
     if (existingItem) {
+        if(existingItem[0].maxQuantity===existingItem[0].quantity)return;
         await con.promise().query('UPDATE cart SET quantity = quantity + 1 WHERE user_id = ? AND product_Id = ?', [userId, productId]);
         res.status(200).json({ message: 'Quantity increased successfully' });
     } else {
@@ -103,4 +104,14 @@ const getCartDataByUserId=async(req,res)=>{
         res.status(500).json({ message: 'Failed to fetch cart items', error: error.message });
     }
 }
-module.exports={add,increase,decrease,remove,exist,getCartDataByUserId}
+const deleteCartByUserId = async (req,res) => {
+  try {
+    const {Id}=req.params;
+      const deleteQuery = `DELETE FROM cart WHERE user_id = ?`;
+      const [result] = await con.promise().query(deleteQuery, [Id]);
+      console.log('Deleted rows:', result.affectedRows);
+  } catch (error) {
+      console.error('Error deleting cart items:', error);
+  }
+};
+module.exports={add,deleteCartByUserId,increase,decrease,remove,exist,getCartDataByUserId}
